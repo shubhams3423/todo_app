@@ -1,10 +1,15 @@
+import { Route, Routes } from "react-router";
 import "./App.css";
-
+import NewTodoList from "./components/NewTodoList";
+import MainComponent from "./components/MainComponent";
 function App() {
   return (
-    <div className="App">
-      <h1 className="text-red-500 font-bold text-lg">Hello World</h1>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<NewTodoList />} />
+        <Route path="taskList" element={<MainComponent />} />
+      </Routes>
+    </>
   );
 }
 
