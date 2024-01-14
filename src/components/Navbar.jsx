@@ -24,7 +24,7 @@ const Navbar = () => {
         {theme === "light" ? (
           <FiMoon
             onClick={handleTheme}
-            className="text-[#23272F]  text-lg cursor-pointer"
+            className="text-[#23272F] text-lg cursor-pointer"
           />
         ) : (
           <LuSun

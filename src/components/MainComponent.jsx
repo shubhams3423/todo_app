@@ -5,7 +5,6 @@ import { useTodo } from "./ContextProvider";
 
 const MainComponent = () => {
   const { theme } = useTodo();
-
   return (
     <div
       className={`${

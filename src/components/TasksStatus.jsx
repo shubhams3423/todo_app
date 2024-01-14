@@ -20,8 +20,8 @@ const TasksStatus = () => {
                 theme === "light" ? "bg-[#07050c61]" : "bg-[#484848]"
               } rounded-lg px-3 text-xs flex items-center font-semibold text-white  bg-[#07050c61]`}
             >
-              {(task.id === 1 && task.totalTasksCount) ||
-                (task.id === 2 && task.completedTasks)}
+              {task.id === 1 && task.totalTasksCount}
+              {task.id === 2 && task.completedTasks}
             </p>
           </div>
         );
