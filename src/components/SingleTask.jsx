@@ -3,6 +3,7 @@ import { useTodo } from "./ContextProvider";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import InputTask from "./InputTask";
 import moment from "moment";
+import { toast } from "react-toastify";
 const SingleTask = () => {
   const {
     tasks,
@@ -10,24 +11,16 @@ const SingleTask = () => {
     theme,
     taskDetails,
     setTaskDetails,
-    setCompletedTasks,
+    taskTypes,
+    setTaskTypes,
+    setShowInputTask,
+    showEditOption,
+    setShowEditOption,
+    taskMenuId,
+    setTaskMenuId,
   } = useTodo();
-  const [taskMenuId, setTaskMenuId] = useState(-1);
-  const [showEditOption, setShowEditOption] = useState(-1);
-  const [taskId, setTaskId] = useState();
+  const [editTaskId, setEditTaskId] = useState();
   const [editTaskTitle, setEditTaskTitle] = useState("");
-  useEffect(() => {
-    tasks.length > 0 &&
-      localStorage.setItem(moment().format("MMM Do YY"), JSON.stringify(tasks));
-  }, [tasks]);
-  useEffect(() => {
-    const storedTaskList = JSON.parse(
-      localStorage.getItem(moment().format("MMM Do YY")) || null
-    );
-    if (storedTaskList !== null) {
-      setTasks(storedTaskList);
-    }
-  }, []);
   const taskMenuList = [
     {
       id: 1,
@@ -38,11 +31,45 @@ const SingleTask = () => {
       feature: "edit",
     },
   ];
+  useEffect(() => {
+    tasks.length > 0 &&
+      localStorage.setItem(moment().format("MMM Do YY"), JSON.stringify(tasks));
+  }, [tasks]);
+  useEffect(() => {
+    const storedTaskList = JSON.parse(
+      localStorage.getItem(moment().format("MMM Do YY")) || null
+    );
+    if (storedTaskList !== null) {
+      setTasks(storedTaskList);
+      //Initializing total tasks
+      setTaskTypes(
+        taskTypes.map((task, key) => {
+          if (task.id === 1) {
+            task.totalTasksCount = storedTaskList.length;
+            return task;
+          } else return task;
+        })
+      );
+      //Initializing completed tasks
+      setTaskTypes(
+        taskTypes.map((task, key) => {
+          if (task.id === 2) {
+            const completedTaskCount = storedTaskList
+              .map((task, key) => task.isCompletedTask)
+              .filter((task, key) => task !== false).length;
+            task.completedTasks = completedTaskCount;
+            return task;
+          } else return task;
+        })
+      );
+    }
+  }, []);
+
   const editTaskkeyHandler = (e) => {
     if (e.key === "Enter" && editTaskTitle !== "") {
       setTasks(
         tasks.map((taskObj, key) => {
-          if (taskObj.id === taskId) {
+          if (taskObj.id === editTaskId) {
             return {
               ...taskObj,
               taskTitle: editTaskTitle,
@@ -50,15 +77,17 @@ const SingleTask = () => {
                 taskDetails.lableName === ""
                   ? taskObj.lableName
                   : taskDetails.lableName,
-              color:
-                taskDetails.color === "" ? taskObj.color : taskDetails.color,
+              bgColor:
+                taskDetails.bgColor === ""
+                  ? taskObj.bgColor
+                  : taskDetails.bgColor,
             };
           } else {
             return taskObj;
           }
         })
       );
-      setTaskDetails({ taskTitle: "", lableName: "", color: "" });
+      setTaskDetails({ taskTitle: "", lableName: "", bgColor: "" });
       setShowEditOption(-1);
       setTaskMenuId(-1);
     }
@@ -68,7 +97,9 @@ const SingleTask = () => {
     taskMenuId === -1 ? setTaskMenuId(taskId) : setTaskMenuId(-1);
   };
 
-  const handleTaskOptions = (featureId, taskId) => {
+  const handleTaskMenuOptions = (featureId, taskId) => {
+    //featureId===1 is remove task
+    //featureId===2 is edit task
     switch (featureId) {
       case 1:
         tasks.length === 1 &&
@@ -77,13 +108,33 @@ const SingleTask = () => {
             JSON.stringify([])
           );
         setTasks(tasks.filter((task, key) => task.id !== taskId));
+        setTaskTypes(
+          taskTypes.map((task, key) => {
+            switch (task.id) {
+              case 1:
+                task.totalTasksCount -= 1;
+                setTaskMenuId(-1);
+                return task;
+              case 2:
+                let checkIsTaskCompleted;
+                checkIsTaskCompleted = tasks.find(
+                  (taskObj) => taskObj.id === taskId
+                ).isCompletedTask;
+                if (checkIsTaskCompleted) task.completedTasks -= 1;
+                setTaskMenuId(-1);
+                return task;
+              default:
+            }
+          })
+        );
         break;
       case 2:
-        setShowEditOption(taskId);
-        setTaskId(taskId);
+        setShowInputTask(false);
+        setEditTaskId(taskId);
         setEditTaskTitle(
           tasks.find((taskObj) => taskObj.id === taskId).taskTitle
         );
+        setShowEditOption(taskId);
         break;
       default:
     }
@@ -94,8 +145,31 @@ const SingleTask = () => {
         if (task.id === taskId) {
           if (!task.isCompletedTask) {
             task.isCompletedTask = true;
+            //increment in completed task count
+            setTaskTypes(
+              taskTypes.map((task, key) => {
+                if (task.id === 2) {
+                  task.completedTasks += 1;
+                  //For toast msg
+                  task.completedTasks ===
+                    taskTypes.find((taskTypeObj) => taskTypeObj.id === 1)
+                      .totalTasksCount &&
+                    toast.success("All tasks are completed 🎉🎉🎉 ");
+                  return task;
+                } else return task;
+              })
+            );
           } else {
             task.isCompletedTask = false;
+            //decrement in completed task count
+            setTaskTypes(
+              taskTypes.map((task, key) => {
+                if (task.id === 2) {
+                  task.completedTasks -= 1;
+                  return task;
+                } else return task;
+              })
+            );
           }
           return task;
         }
@@ -114,12 +188,11 @@ const SingleTask = () => {
             editTaskTitle={editTaskTitle}
             setEditTaskTitle={setEditTaskTitle}
             editTaskkeyHandler={editTaskkeyHandler}
-            taskId={task.id}
           />
         ) : (
           <div
             key={key}
-            className={`  ${
+            className={`${
               theme === "light" ? "bg-[#868686ad]" : "bg-[#07050c61]"
             }  rounded-lg flex items-start justify-between  p-3 relative mb-3  `}
           >
@@ -128,7 +201,7 @@ const SingleTask = () => {
                 type="checkbox"
                 id={task.id}
                 checked={task.isCompletedTask}
-                className="rounded-full h-5 w-5  cursor-pointer bg-white  text-green-600  focus:border-transparent focus:ring-0"
+                className="rounded-full h-5 w-5 text-[17px]  cursor-pointer bg-white  text-green-600  focus:border-transparent focus:ring-0"
                 onChange={() => handleCompletedTasks(task.id)}
               />
               <div className="ms-4 me-2">
@@ -153,7 +226,7 @@ const SingleTask = () => {
                   {task.taskTitle}
                 </label>
                 <div
-                  className={`${task.color} rounded py-[2px] px-1 w-fit text-white font-lighter text-[11px]`}
+                  className={`${task.bgColor} rounded py-[2px] px-1 w-fit text-white font-lighter text-[11px]`}
                 >
                   {task.lableName}
                 </div>
@@ -175,8 +248,9 @@ const SingleTask = () => {
               >
                 {taskMenuList.map((menuItem, key) => (
                   <p
+                    key={key}
                     className="font-semibold opacity-[0.8] cursor-pointer text-sm"
-                    onClick={() => handleTaskOptions(menuItem.id, task.id)}
+                    onClick={() => handleTaskMenuOptions(menuItem.id, task.id)}
                   >
                     {menuItem.feature}
                   </p>

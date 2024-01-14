@@ -1,6 +1,5 @@
 import React from "react";
 import { useTodo } from "./ContextProvider";
-import AddNewTodoListButton from "./AddNewTodoListButton";
 import { GoPlus } from "react-icons/go";
 import moment from "moment";
 
@@ -15,11 +14,13 @@ const TodoInfo = () => {
       >
         {moment().format("MMM Do YY")}
       </h2>
-      <AddNewTodoListButton
-        btnBgColor={"bg-gray-500"}
-        size={"w-6"}
-        icon={<GoPlus className="text-xl font-bold" />}
-      />
+      <div>
+        <button
+          className={`w-6 aspect-square	rounded-full  bg-gray-500 text-white flex justify-center items-center`}
+        >
+          <GoPlus className="text-xl font-bold" />
+        </button>
+      </div>
     </div>
   );
 };

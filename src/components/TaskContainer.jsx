@@ -13,7 +13,6 @@ const TaskContainer = () => {
     >
       <AddNewTaskButtton />
       <div className={` rounded-2xl h-full`}>
-        {" "}
         <div className={`flex items-center text-white mb-1`}>
           <div
             className={`w-4 h-4 ${

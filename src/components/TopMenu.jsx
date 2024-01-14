@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import TodoInfo from "./TodoInfo";
-import TaskStatus from "./TaskStatus";
+import TasksStatus from "./TasksStatus";
 import { useTodo } from "./ContextProvider";
 
 const TopMenu = () => {
@@ -14,7 +14,7 @@ const TopMenu = () => {
     >
       <Navbar />
       <TodoInfo />
-      <TaskStatus />
+      <TasksStatus />
     </div>
   );
 };
