@@ -18,6 +18,7 @@ const SingleTask = () => {
     setShowEditOption,
     taskMenuId,
     setTaskMenuId,
+    currentDate,
   } = useTodo();
   const [editTaskId, setEditTaskId] = useState();
   const [editTaskTitle, setEditTaskTitle] = useState("");
@@ -32,12 +33,12 @@ const SingleTask = () => {
     },
   ];
   useEffect(() => {
-    tasks.length > 0 &&
-      localStorage.setItem(moment().format("MMM Do YY"), JSON.stringify(tasks));
+    tasks?.length > 0 &&
+      localStorage.setItem(currentDate, JSON.stringify(tasks));
   }, [tasks]);
   useEffect(() => {
     const storedTaskList = JSON.parse(
-      localStorage.getItem(moment().format("MMM Do YY")) || null
+      localStorage.getItem(currentDate) || null
     );
     if (storedTaskList !== null) {
       setTasks(storedTaskList);
@@ -45,7 +46,7 @@ const SingleTask = () => {
       setTaskTypes(
         taskTypes.map((task, key) => {
           if (task.id === 1) {
-            task.totalTasksCount = storedTaskList.length;
+            task.totalTasksCount = storedTaskList?.length;
             return task;
           } else return task;
         })
@@ -56,7 +57,7 @@ const SingleTask = () => {
           if (task.id === 2) {
             const completedTaskCount = storedTaskList
               .map((task, key) => task.isCompletedTask)
-              .filter((task, key) => task !== false).length;
+              .filter((task, key) => task !== false)?.length;
             task.completedTasks = completedTaskCount;
             return task;
           } else return task;
@@ -102,11 +103,8 @@ const SingleTask = () => {
     //featureId===2 is edit task
     switch (featureId) {
       case 1:
-        tasks.length === 1 &&
-          localStorage.setItem(
-            moment().format("MMM Do YY"),
-            JSON.stringify([])
-          );
+        tasks?.length === 1 &&
+          localStorage.setItem(currentDate, JSON.stringify([]));
         setTasks(tasks.filter((task, key) => task.id !== taskId));
         setTaskTypes(
           taskTypes.map((task, key) => {
@@ -179,7 +177,7 @@ const SingleTask = () => {
   };
 
   return (
-    <div className="absolute left-0 right-0 h-full overflow-y-scroll  p-2 pb-4">
+    <div className="scrollbar-hide absolute left-0 right-0 h-full overflow-y-scroll  p-2 pb-4">
       {tasks.map((task, key) => {
         return showEditOption === task.id ? (
           <InputTask
@@ -199,18 +197,18 @@ const SingleTask = () => {
             <div className="flex ">
               <input
                 type="checkbox"
-                id={task.id}
-                checked={task.isCompletedTask}
+                id={task?.id}
+                checked={task?.isCompletedTask}
                 className="rounded-full h-5 w-5 text-[17px]  cursor-pointer bg-white  text-green-600  focus:border-transparent focus:ring-0"
                 onChange={() => handleCompletedTasks(task.id)}
               />
               <div className="ms-4 me-2">
                 <label
-                  htmlFor={task.id}
+                  htmlFor={task?.id}
                   className={`mb-1 break-all ${
-                    taskMenuId === task.id && "opacity-[0.3]"
+                    taskMenuId === task?.id && "opacity-[0.3]"
                   } ${
-                    task.isCompletedTask
+                    task?.isCompletedTask
                       ? `line-through ${
                           theme === "light"
                             ? "text-[#00000082]"
@@ -223,12 +221,12 @@ const SingleTask = () => {
                         }`
                   } `}
                 >
-                  {task.taskTitle}
+                  {task?.taskTitle}
                 </label>
                 <div
                   className={`${task.bgColor} rounded py-[2px] px-1 w-fit text-white font-lighter text-[11px]`}
                 >
-                  {task.lableName}
+                  {task?.lableName}
                 </div>
               </div>
             </div>
@@ -252,7 +250,7 @@ const SingleTask = () => {
                     className="font-semibold opacity-[0.8] cursor-pointer text-sm"
                     onClick={() => handleTaskMenuOptions(menuItem.id, task.id)}
                   >
-                    {menuItem.feature}
+                    {menuItem?.feature}
                   </p>
                 ))}
               </div>

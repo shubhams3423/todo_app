@@ -4,7 +4,7 @@ import { GoPlus } from "react-icons/go";
 import moment from "moment";
 
 const TodoInfo = () => {
-  const { theme } = useTodo();
+  const { theme, currentDate } = useTodo();
   return (
     <div className="flex items-center justify-between mb-4 mt-1">
       <h2
@@ -12,14 +12,14 @@ const TodoInfo = () => {
           theme === "light" ? "text-[#23272F]" : "text-white"
         } text-3xl font-bold opacity-80`}
       >
-        {moment().format("MMM Do YY")}
+        {currentDate}
       </h2>
       <div>
-        <button
+        {/* <button
           className={`w-6 aspect-square	rounded-full  bg-gray-500 text-white flex justify-center items-center`}
         >
           <GoPlus className="text-xl font-bold" />
-        </button>
+        </button> */}
       </div>
     </div>
   );
