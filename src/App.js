@@ -9,7 +9,6 @@ function App() {
       <Routes>
         <Route path="/" element={<MainComponent />} />
         <Route path="passedtodolist" element={<PassedTodoList />} />
-        <Route path="taskList" element={<MainComponent />} />
       </Routes>
     </div>
   );

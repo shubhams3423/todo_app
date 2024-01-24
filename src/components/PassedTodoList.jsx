@@ -35,7 +35,8 @@ const PassedTodoList = () => {
       })
     );
     setCurrentDate(date);
-    navigate("/taskList");
+
+    navigate("/");
   };
   const handleUserName = (e) => {
     if (e.key === "Enter") {
@@ -59,6 +60,7 @@ const PassedTodoList = () => {
           onClick={() => navigate("/")}
         />
       </div>
+
       <hr className="p-[0.4px] bg-gray-500" />
       <div className="p-3 flex flex-col gap-y-5">
         {passedTodoListDates.map((todoListDate, key) => (

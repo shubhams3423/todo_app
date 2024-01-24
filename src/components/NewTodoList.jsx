@@ -11,7 +11,7 @@ const NewTodoList = () => {
         </h1>
         <div className="flex justify-center">
           <button
-            onClick={() => navigate("/taskList")}
+            onClick={() => navigate("/")}
             className={`w-16 aspect-square	rounded-full shadow-[0_0_20px_#80008094] bg-[#800080ba] text-white flex justify-center items-center`}
           >
             <FaArrowRight className="text-2xl font-bold " />

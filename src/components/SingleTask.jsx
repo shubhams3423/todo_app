@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useTodo } from "./ContextProvider";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import InputTask from "./InputTask";
-import moment from "moment";
 import { toast } from "react-toastify";
 const SingleTask = () => {
   const {
@@ -230,6 +229,7 @@ const SingleTask = () => {
                 </div>
               </div>
             </div>
+
             <div>
               <BiDotsVerticalRounded
                 className="text-white text-lg cursor-pointer"
