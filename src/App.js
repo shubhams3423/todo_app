@@ -1,15 +1,16 @@
 import { Route, Routes } from "react-router";
 import "./App.css";
-import NewTodoList from "./components/NewTodoList";
+
 import MainComponent from "./components/MainComponent";
+import PassedTodoList from "./components/PassedTodoList";
 function App() {
   return (
-    <>
+    <div className=" max-w-[430px] m-auto  ">
       <Routes>
-        <Route path="/" element={<NewTodoList />} />
-        <Route path="taskList" element={<MainComponent />} />
+        <Route path="/" element={<MainComponent />} />
+        <Route path="passedtodolist" element={<PassedTodoList />} />
       </Routes>
-    </>
+    </div>
   );
 }
 
