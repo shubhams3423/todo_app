@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTodo } from "./ContextProvider";
 import { MdKeyboardArrowRight } from "react-icons/md";
 const PassedTodoList = () => {
-  const { setTasks, setCurrentDate, tasks, setTaskTypes, taskTypes } =
-    useTodo();
+  const { setTasks, setDate, tasks, setTaskTypes, taskTypes } = useTodo();
   const [userName, setUserName] = useState("");
   const [passedTodoListDates, setPassedTodoListDates] = useState([]);
   useEffect(() => {
@@ -14,28 +13,8 @@ const PassedTodoList = () => {
   const navigate = useNavigate("");
   const handlePassedTodoListDates = (date) => {
     setTasks(JSON.parse(localStorage.getItem(date)) || []); //task updated
-    setTaskTypes(
-      taskTypes.map((task, key) => {
-        if (task.id === 1) {
-          task.totalTasksCount = tasks?.length;
-          return task;
-        } else return task;
-      })
-    );
-    //Initializing completed tasks
-    setTaskTypes(
-      taskTypes.map((task, key) => {
-        if (task.id === 2) {
-          const completedTaskCount = tasks
-            .map((task, key) => task.isCompletedTask)
-            .filter((task, key) => task !== false)?.length;
-          task.completedTasks = completedTaskCount;
-          return task;
-        } else return task;
-      })
-    );
-    setCurrentDate(date);
 
+    setDate(date);
     navigate("/");
   };
   const handleUserName = (e) => {
@@ -46,7 +25,7 @@ const PassedTodoList = () => {
 
   return (
     <div className="h-screen">
-      <div className="flex justify-between items-center p-3 bg-black text-white">
+      <div className="flex justify-between items-center p-3 bg-black text-white h-16">
         <input
           type="text"
           placeholder="User name"
@@ -60,24 +39,25 @@ const PassedTodoList = () => {
           onClick={() => navigate("/")}
         />
       </div>
-
       <hr className="p-[0.4px] bg-gray-500" />
-      <div className="p-3 flex flex-col gap-y-5">
-        {passedTodoListDates.map((todoListDate, key) => (
-          <ul
-            key={key}
-            className={`flex ${
-              key % 2 === 0 ? "justify-start" : "justify-end"
-            }`}
-          >
-            <li
-              className="bg-[#3838381c] text-lg cursor-pointer font-semibold shadow-[2px_3px_7px_#00000096] text-[#2f2f2f] rounded-xl p-3 w-52"
-              onClick={() => handlePassedTodoListDates(todoListDate)}
+      <div className="relative left-0 right-0 h-[calc(100%-10rem)]">
+        <div className="p-3 flex flex-col gap-y-5 absolute h-full overflow-y-scroll right-0 left-0">
+          {passedTodoListDates.map((todoListDate, key) => (
+            <div
+              key={key}
+              className={`flex ${
+                key % 2 === 0 ? "justify-start" : "justify-end"
+              }`}
             >
-              {todoListDate}
-            </li>
-          </ul>
-        ))}
+              <li
+                className="bg-[#3838381c] list-none text-lg cursor-pointer font-semibold shadow-[2px_3px_7px_#00000096] text-[#2f2f2f] rounded-xl p-3 w-52"
+                onClick={() => handlePassedTodoListDates(todoListDate)}
+              >
+                {todoListDate}
+              </li>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

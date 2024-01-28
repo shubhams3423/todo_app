@@ -8,7 +8,7 @@ const ContextProvider = ({ children }) => {
   const [showInputTask, setShowInputTask] = useState(false);
   const [showEditOption, setShowEditOption] = useState(-1);
   const [taskMenuId, setTaskMenuId] = useState(-1);
-  const [currentDate, setCurrentDate] = useState(moment().format("MMM Do YY"));
+  const [date, setDate] = useState(moment().format("MMM Do YY"));
   const [taskTypes, setTaskTypes] = useState([
     {
       id: 1,
@@ -47,8 +47,8 @@ const ContextProvider = ({ children }) => {
         setShowEditOption,
         taskMenuId,
         setTaskMenuId,
-        currentDate,
-        setCurrentDate,
+        date,
+        setDate,
       }}
     >
       {children}

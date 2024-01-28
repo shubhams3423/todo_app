@@ -1,10 +1,11 @@
 import React from "react";
 import { useTodo } from "./ContextProvider";
 import { GoPlus } from "react-icons/go";
-import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const TodoInfo = () => {
-  const { theme, currentDate } = useTodo();
+  const { theme, date } = useTodo();
+  const navigate = useNavigate("");
   return (
     <div className="flex items-center justify-between mb-4 mt-1">
       <h2
@@ -12,14 +13,15 @@ const TodoInfo = () => {
           theme === "light" ? "text-[#23272F]" : "text-white"
         } text-3xl font-bold opacity-80`}
       >
-        {currentDate}
+        {date}
       </h2>
       <div>
-        {/* <button
+        <button
           className={`w-6 aspect-square	rounded-full  bg-gray-500 text-white flex justify-center items-center`}
+          onClick={() => navigate("/newtodolist")}
         >
           <GoPlus className="text-xl font-bold" />
-        </button> */}
+        </button>
       </div>
     </div>
   );

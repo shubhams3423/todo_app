@@ -17,7 +17,7 @@ const SingleTask = () => {
     setShowEditOption,
     taskMenuId,
     setTaskMenuId,
-    currentDate,
+    date,
   } = useTodo();
   const [editTaskId, setEditTaskId] = useState();
   const [editTaskTitle, setEditTaskTitle] = useState("");
@@ -32,38 +32,8 @@ const SingleTask = () => {
     },
   ];
   useEffect(() => {
-    tasks?.length > 0 &&
-      localStorage.setItem(currentDate, JSON.stringify(tasks));
+    tasks?.length > 0 && localStorage.setItem(date, JSON.stringify(tasks));
   }, [tasks]);
-  useEffect(() => {
-    const storedTaskList = JSON.parse(
-      localStorage.getItem(currentDate) || null
-    );
-    if (storedTaskList !== null) {
-      setTasks(storedTaskList);
-      //Initializing total tasks
-      setTaskTypes(
-        taskTypes.map((task, key) => {
-          if (task.id === 1) {
-            task.totalTasksCount = storedTaskList?.length;
-            return task;
-          } else return task;
-        })
-      );
-      //Initializing completed tasks
-      setTaskTypes(
-        taskTypes.map((task, key) => {
-          if (task.id === 2) {
-            const completedTaskCount = storedTaskList
-              .map((task, key) => task.isCompletedTask)
-              .filter((task, key) => task !== false)?.length;
-            task.completedTasks = completedTaskCount;
-            return task;
-          } else return task;
-        })
-      );
-    }
-  }, []);
 
   const editTaskkeyHandler = (e) => {
     if (e.key === "Enter" && editTaskTitle !== "") {
@@ -102,8 +72,7 @@ const SingleTask = () => {
     //featureId===2 is edit task
     switch (featureId) {
       case 1:
-        tasks?.length === 1 &&
-          localStorage.setItem(currentDate, JSON.stringify([]));
+        tasks?.length === 1 && localStorage.setItem(date, JSON.stringify([]));
         setTasks(tasks.filter((task, key) => task.id !== taskId));
         setTaskTypes(
           taskTypes.map((task, key) => {

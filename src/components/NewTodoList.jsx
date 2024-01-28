@@ -1,23 +1,53 @@
-import React from "react";
-import { FaArrowRight } from "react-icons/fa6";
+import React, { useState } from "react";
+import Datepicker from "tailwind-datepicker-react";
 import { useNavigate } from "react-router-dom";
+import { useTodo } from "./ContextProvider";
+import moment from "moment";
+import { IoIosArrowBack } from "react-icons/io";
 const NewTodoList = () => {
-  const navigate = useNavigate();
+  const { setDate, setTasks } = useTodo();
+  const navigate = useNavigate("");
+  const options = {
+    todayBtn: false,
+    datepickerClassNames: "top-24",
+  };
+
+  const [show, setShow] = useState(true);
+  const handleChange = (selectedDate) => {
+    setDate(moment(selectedDate).format("MMM Do YY"));
+    setTasks([]);
+    const response = localStorage.getItem("dates");
+    if (
+      response !== null &&
+      !JSON.parse(response).includes(moment(selectedDate).format("MMM Do YY"))
+    ) {
+      localStorage.setItem(
+        "dates",
+        JSON.stringify([
+          ...JSON.parse(response),
+          moment(selectedDate).format("MMM Do YY"),
+        ])
+      );
+    }
+  };
+  const handleClose = (state) => {
+    setShow(state);
+    navigate("/");
+  };
   return (
-    <div className="overflow-y-hidden h-screen flex">
-      <div className="bg-[#3b00f34a] flex gap-8 flex-col  rounded-lg p-6 w-[85%] sm:w-64 m-auto shadow-[1px_1px_10px_#80008057] ">
-        <h1 className="text-2xl font-bold">
-          Start your day having todolist with you!!!
-        </h1>
-        <div className="flex justify-center">
-          <button
-            onClick={() => navigate("/")}
-            className={`w-16 aspect-square	rounded-full shadow-[0_0_20px_#80008094] bg-[#800080ba] text-white flex justify-center items-center`}
-          >
-            <FaArrowRight className="text-2xl font-bold " />
-          </button>
-        </div>
+    <div className="relative max-w-sm px-3 pt-4 pb-6 h-screen bg-[#000000eb]">
+      <div>
+        <IoIosArrowBack
+          className=" text-white cursor-pointer text-lg mb-4"
+          onClick={() => navigate("/")}
+        />
       </div>
+      <Datepicker
+        options={options}
+        onChange={handleChange}
+        show={show}
+        setShow={handleClose}
+      />
     </div>
   );
 };
