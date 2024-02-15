@@ -120,7 +120,7 @@ const SingleTask = () => {
                   task.completedTasks ===
                     taskTypes.find((taskTypeObj) => taskTypeObj.id === 1)
                       .totalTasksCount &&
-                    toast.success("All tasks are completed 🎉🎉🎉 ");
+                    toast.success("All tasks are completed ");
                   return task;
                 } else return task;
               })

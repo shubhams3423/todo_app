@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useTodo } from "./ContextProvider";
 
 const InputTask = ({
@@ -12,8 +12,10 @@ const InputTask = ({
   editTaskkeyHandler,
 }) => {
   const { theme, taskDetails, setTaskDetails } = useTodo();
+  const inputRef = useRef(null);
   const lableHandler = (bgColor, name) => {
     setTaskDetails({ ...taskDetails, lableName: name, bgColor: bgColor });
+    inputRef.current.focus();
   };
 
   const lables = [
@@ -53,11 +55,13 @@ const InputTask = ({
       bgColor: "bg-green-500",
     },
   ];
+
   return (
     <div>
       <input
         type="text"
         autoFocus="autoFocus"
+        ref={inputRef}
         value={(isEditTask && editTaskTitle) || (isAddNewTask && input)}
         className={`rounded-lg border-1 border-solid p-2 focus:border-[#35B2EA]  focus:ring-0  ${
           theme === "light"

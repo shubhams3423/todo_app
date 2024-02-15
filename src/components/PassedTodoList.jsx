@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTodo } from "./ContextProvider";
 import { MdKeyboardArrowRight } from "react-icons/md";
 const PassedTodoList = () => {
-  const { setTasks, setDate, tasks, setTaskTypes, taskTypes } = useTodo();
+  const { setTasks, setDate } = useTodo();
   const [userName, setUserName] = useState("");
   const [passedTodoListDates, setPassedTodoListDates] = useState([]);
   useEffect(() => {
@@ -13,7 +13,6 @@ const PassedTodoList = () => {
   const navigate = useNavigate("");
   const handlePassedTodoListDates = (date) => {
     setTasks(JSON.parse(localStorage.getItem(date)) || []); //task updated
-
     setDate(date);
     navigate("/");
   };
@@ -24,7 +23,7 @@ const PassedTodoList = () => {
   };
 
   return (
-    <div className="h-screen">
+    <div className="h-screen flex flex-col overflow-hidden">
       <div className="flex justify-between items-center p-3 bg-black text-white h-16">
         <input
           type="text"
@@ -39,8 +38,7 @@ const PassedTodoList = () => {
           onClick={() => navigate("/")}
         />
       </div>
-      <hr className="p-[0.4px] bg-gray-500" />
-      <div className="relative left-0 right-0 h-[calc(100%-10rem)]">
+      <div className="grow relative left-0 right-0">
         <div className="p-3 flex flex-col gap-y-5 absolute h-full overflow-y-scroll right-0 left-0">
           {passedTodoListDates.map((todoListDate, key) => (
             <div
