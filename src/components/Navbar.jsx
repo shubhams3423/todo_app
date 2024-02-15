@@ -17,7 +17,7 @@ const Navbar = () => {
           className={`${
             theme === "light" ? "text-[#23272F]" : "text-white"
           } cursor-pointer text-lg`}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/passedtodolist")}
         />
       </div>
       <div>

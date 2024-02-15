@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useContext, useState, createContext, useRef } from "react";
 
 const TodoContext = createContext("");
@@ -7,6 +8,7 @@ const ContextProvider = ({ children }) => {
   const [showInputTask, setShowInputTask] = useState(false);
   const [showEditOption, setShowEditOption] = useState(-1);
   const [taskMenuId, setTaskMenuId] = useState(-1);
+  const [date, setDate] = useState(moment().format("MMM Do YY"));
   const [taskTypes, setTaskTypes] = useState([
     {
       id: 1,
@@ -45,6 +47,8 @@ const ContextProvider = ({ children }) => {
         setShowEditOption,
         taskMenuId,
         setTaskMenuId,
+        date,
+        setDate,
       }}
     >
       {children}
